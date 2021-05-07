@@ -8,6 +8,7 @@ namespace FlightBooking.Core
     {
         private readonly string _verticalWhiteSpace = Environment.NewLine + Environment.NewLine;
         private readonly string _newLine = Environment.NewLine;
+        private string result = "";
         private const string Indentation = "    ";
 
         public ScheduledFlight(FlightRoute flightRoute)
@@ -39,7 +40,7 @@ namespace FlightBooking.Core
             var totalExpectedBaggage = 0;
             var seatsTaken = 0;
 
-            var result = "Flight summary for " + FlightRoute.Title;
+            result = "Flight summary for " + FlightRoute.Title;
 
             foreach (var passenger in Passengers)
             {
@@ -110,18 +111,69 @@ namespace FlightBooking.Core
 
             result += _verticalWhiteSpace;
 
-            if (profitSurplus > 0 &&
-                seatsTaken < Aircraft.NumberOfSeats &&
-                seatsTaken / (double) Aircraft.NumberOfSeats > FlightRoute.MinimumTakeOffPercentage)
+            // Added each rule in a separate method as this will help with manipulating
+            // the options given as well as being able to add further rules in the future.
+
+            //if (profitSurplus > 0 &&
+            //    seatsTaken < Aircraft.NumberOfSeats &&
+            //    seatsTaken / (double)Aircraft.NumberOfSeats > FlightRoute.MinimumTakeOffPercentage)
+            //{
+            //    result += "THIS FLIGHT MAY PROCEED";
+            //}
+            //else
+            //{
+            //    result += "FLIGHT MAY NOT PROCEED";
+            //}
+
+            if (CheckProfitSurplus(profitSurplus) && CheckSeatsTaken(seatsTaken) &&
+                CheckMinPercentageExceeded(seatsTaken))
             {
-                result += "THIS FLIGHT MAY PROCEED";
+
             }
-            else
-            {
-                result += "FLIGHT MAY NOT PROCEED";
-            }
-            
+
             return result;
         }
+
+        public bool CheckProfitSurplus(double profitSurplus)
+        {
+            if (profitSurplus > 0)
+                return true;
+            else
+            {
+                // TODO: Add option to switch to, when revenue < cost
+
+                // Get number of employees on board
+                // Get min percentage required for flight to take off
+                // Check employees exceed min percentage
+                // If so, return true else return false
+            }
+
+            return true;
+        }
+
+        public bool CheckSeatsTaken(int seatsTaken)
+        {
+            if (seatsTaken < Aircraft.NumberOfSeats)
+                return true;
+            else
+            {
+                // TODO: Add option to suggest other aircrafts if flight is overbooked.
+
+                // Check if another aircraft is available
+                // If available then suggest available aircrafts
+                // If not available, return false
+            }
+
+            return true;
+        }
+
+        public bool CheckMinPercentageExceeded(int seatsTaken)
+        {
+            if (seatsTaken / (double)Aircraft.NumberOfSeats > FlightRoute.MinimumTakeOffPercentage)
+                return true;
+            else
+                return false;
+        }
+
     }
 }
