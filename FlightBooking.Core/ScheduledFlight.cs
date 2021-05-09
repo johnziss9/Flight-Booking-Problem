@@ -136,19 +136,24 @@ namespace FlightBooking.Core
 
         public bool CheckProfitSurplus(double profitSurplus)
         {
+            // If profitSurplus is less than 0 then
+            // get number of employees on board and
+            // get min percentage required for flight to take off
+
+            // Check employees exceed min percentage
+            // If so, return true else return false
+
             if (profitSurplus > 0)
                 return true;
-            else
+            else if (Passengers.Count(p => p.Type == PassengerType.AirlineEmployee) / (double)Aircraft.NumberOfSeats >
+                    FlightRoute.MinimumTakeOffPercentage)
             {
-                // TODO: Add option to switch to, when revenue < cost
+                result += "THE REVENUE IS LESS THAN THE COST OF FLIGHT BUT FLIGHT MAY PROCEED";
 
-                // Get number of employees on board
-                // Get min percentage required for flight to take off
-                // Check employees exceed min percentage
-                // If so, return true else return false
+                return true;
             }
-
-            return true;
+            else
+                return false;
         }
 
         public bool CheckSeatsTaken(int seatsTaken)
