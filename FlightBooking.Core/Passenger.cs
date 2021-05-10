@@ -15,6 +15,7 @@
     {
         General,
         LoyaltyMember,
-        AirlineEmployee
+        AirlineEmployee,
+        Discounted
     }
 }

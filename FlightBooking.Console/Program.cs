@@ -57,6 +57,16 @@ namespace FlightBooking.Console
                         Age = Convert.ToInt32(passengerSegments[3]),
                     });
                 }
+                else if (enteredText.Contains("add discounted"))
+                {
+                    var passengerSegments = enteredText.Split(' ');
+                    _scheduledFlight.AddPassenger(new Passenger
+                    {
+                        Type = PassengerType.Discounted,
+                        Name = passengerSegments[2],
+                        Age = Convert.ToInt32(passengerSegments[3]),
+                    });
+                }
                 else if (enteredText.Contains("exit"))
                 {
                     Environment.Exit(1);
@@ -77,8 +87,8 @@ namespace FlightBooking.Console
             _planes = new List<Plane>();
 
             _planes.Add(new Plane { Id = 123, Name = "Antonov AN-2", NumberOfSeats = 12 });
-            _planes.Add(new Plane { Id = 124, Name = "Vader DV-9", NumberOfSeats = 10 });
-            _planes.Add(new Plane { Id = 125, Name = "HanSolo HS-3", NumberOfSeats = 15 });
+            _planes.Add(new Plane { Id = 124, Name = "Vader Darth-87", NumberOfSeats = 10 });
+            _planes.Add(new Plane { Id = 125, Name = "Solo R2-D2", NumberOfSeats = 15 });
             _planes.Add(new Plane { Id = 126, Name = "Leia LE-1", NumberOfSeats = 13 });
         }
 

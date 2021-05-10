@@ -73,10 +73,17 @@ namespace FlightBooking.Core
                             totalExpectedBaggage += 1;
                             break;
                         }
+                    case (PassengerType.Discounted):
+                        {
+                            // No bag or loyalty points need to be calculated here
+                            break;
+                        }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                costOfFlight += FlightRoute.BaseCost;
+
+                // Added condition for discounted passengers to only get charged half the price of the base cost.
+                costOfFlight += passenger.Type == PassengerType.Discounted ? costOfFlight += FlightRoute.BaseCost / 2 : FlightRoute.BaseCost;
                 seatsTaken++;
             }
 
