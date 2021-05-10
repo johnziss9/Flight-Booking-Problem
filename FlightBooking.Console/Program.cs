@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FlightBooking.Core;
 
 namespace FlightBooking.Console
@@ -6,9 +7,11 @@ namespace FlightBooking.Console
     internal class Program
     {
         private static ScheduledFlight _scheduledFlight ;
+        private static List<Plane> _planes;
 
         private static void Main(string[] args)
         {
+            GetPlanes();
             SetupAirlineData();
             
             string command;
@@ -20,7 +23,7 @@ namespace FlightBooking.Console
                 if (enteredText.Contains("print summary"))
                 {
                     System.Console.WriteLine();
-                    System.Console.WriteLine(_scheduledFlight.GetSummary());
+                    System.Console.WriteLine(_scheduledFlight.GetSummary(_planes));
                 }
                 else if (enteredText.Contains("add general"))
                 {
@@ -67,6 +70,18 @@ namespace FlightBooking.Console
             } while (command != "exit");
         }
 
+        // Created a new method in which planes can be added into a list
+        // which is called before SetupAirlineData()
+        private static void GetPlanes()
+        {
+            _planes = new List<Plane>();
+
+            _planes.Add(new Plane { Id = 123, Name = "Antonov AN-2", NumberOfSeats = 12 });
+            _planes.Add(new Plane { Id = 124, Name = "Vader DV-9", NumberOfSeats = 10 });
+            _planes.Add(new Plane { Id = 125, Name = "HanSolo HS-3", NumberOfSeats = 15 });
+            _planes.Add(new Plane { Id = 126, Name = "Leia LE-1", NumberOfSeats = 13 });
+        }
+
         private static void SetupAirlineData()
         {
             var londonToParis = new FlightRoute("London", "Paris")
@@ -79,7 +94,7 @@ namespace FlightBooking.Console
 
             _scheduledFlight = new ScheduledFlight(londonToParis);
 
-            _scheduledFlight.SetAircraftForRoute(new Plane { Id = 123, Name = "Antonov AN-2", NumberOfSeats = 12 });
+            _scheduledFlight.SetAircraftForRoute(_planes[0]);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace FlightBooking.Core
             Aircraft = aircraft;
         }
         
-        public string GetSummary()
+        public string GetSummary(List<Plane> planes)
         {
             double costOfFlight = 0;
             double profitFromFlight = 0;
@@ -114,18 +114,7 @@ namespace FlightBooking.Core
             // Added each rule in a separate method as this will help with manipulating
             // the options given as well as being able to add further rules in the future.
 
-            //if (profitSurplus > 0 &&
-            //    seatsTaken < Aircraft.NumberOfSeats &&
-            //    seatsTaken / (double)Aircraft.NumberOfSeats > FlightRoute.MinimumTakeOffPercentage)
-            //{
-            //    result += "THIS FLIGHT MAY PROCEED";
-            //}
-            //else
-            //{
-            //    result += "FLIGHT MAY NOT PROCEED";
-            //}
-
-            if (CheckProfitSurplus(profitSurplus) && CheckSeatsTaken(seatsTaken) &&
+            if (CheckProfitSurplus(profitSurplus) && CheckSeatsTaken(seatsTaken, planes) &&
                 CheckMinPercentageExceeded(seatsTaken))
             {
 
@@ -156,20 +145,34 @@ namespace FlightBooking.Core
                 return false;
         }
 
-        public bool CheckSeatsTaken(int seatsTaken)
+        public bool CheckSeatsTaken(int seatsTaken, List<Plane> planes)
         {
             if (seatsTaken < Aircraft.NumberOfSeats)
                 return true;
             else
             {
-                // TODO: Add option to suggest other aircrafts if flight is overbooked.
-
                 // Check if another aircraft is available
-                // If available then suggest available aircrafts
-                // If not available, return false
-            }
+                var availablePlanes = planes.Where(p => p.NumberOfSeats > seatsTaken);
+                var noOfAvailablePlanes = availablePlanes.Count();
 
-            return true;
+                // If available then suggest available aircrafts
+                if (noOfAvailablePlanes > 0)
+                {
+                    result += "THIS FLIGHT MAY NOT PROCEED.";
+                    result += _newLine;
+                    result += "Other more suitable aircrafts are:";
+
+                    foreach (var plane in availablePlanes)
+                    {
+                        result += _newLine;
+                        result += plane.Name + "could handle this flight.";
+                    }
+                }
+                else
+                    result += "FLIGHT MAY NOT PROCEED";
+
+                return false;
+            }
         }
 
         public bool CheckMinPercentageExceeded(int seatsTaken)
