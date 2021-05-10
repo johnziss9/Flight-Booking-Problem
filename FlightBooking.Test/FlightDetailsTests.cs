@@ -1,11 +1,10 @@
-using System;
 using Xunit;
 using FlightBooking.Core;
 using System.Linq;
 
 namespace FlightBooking.Test
 {
-    public class FlightTests
+    public class FlightDetailsTests
     {
         [Fact]
         public void Calculate_Cost_And_Profit_Of_Flight()
