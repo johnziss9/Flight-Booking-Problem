@@ -75,15 +75,14 @@ namespace FlightBooking.Core
                         }
                     case (PassengerType.Discounted):
                         {
-                            // No bag or loyalty points need to be calculated here
+                            profitFromFlight += FlightRoute.BasePrice / 2;
                             break;
                         }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
 
-                // Added condition for discounted passengers to only get charged half the price of the base cost.
-                costOfFlight += passenger.Type == PassengerType.Discounted ? costOfFlight += FlightRoute.BaseCost / 2 : FlightRoute.BaseCost;
+                costOfFlight += FlightRoute.BaseCost;
                 seatsTaken++;
             }
 
