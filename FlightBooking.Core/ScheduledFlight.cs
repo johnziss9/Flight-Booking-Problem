@@ -114,10 +114,14 @@ namespace FlightBooking.Core
             // Added each rule in a separate method as this will help with manipulating
             // the options given as well as being able to add further rules in the future.
 
-            if (CheckProfitSurplus(profitSurplus) && CheckSeatsTaken(seatsTaken, planes) &&
-                CheckMinPercentageExceeded(seatsTaken))
-            {
+            var checkSeatsTaken = CheckSeatsTaken(seatsTaken, planes);
+            var checkMinPercentageExceeded = CheckMinPercentageExceeded(seatsTaken);
+            var checkProfitSurplus = CheckProfitSurplus(profitSurplus);
 
+            if (checkSeatsTaken == false || checkMinPercentageExceeded == false || checkProfitSurplus == false)
+            {
+                result += "THIS FLIGHT MAY NOT PROCEED.";
+                result += _newLine;
             }
 
             return result;
@@ -138,6 +142,7 @@ namespace FlightBooking.Core
                     FlightRoute.MinimumTakeOffPercentage)
             {
                 result += "THE REVENUE IS LESS THAN THE COST OF FLIGHT BUT FLIGHT MAY PROCEED";
+                result += _newLine;
 
                 return true;
             }
@@ -168,8 +173,6 @@ namespace FlightBooking.Core
                         result += plane.Name + "could handle this flight.";
                     }
                 }
-                else
-                    result += "FLIGHT MAY NOT PROCEED";
 
                 return false;
             }
